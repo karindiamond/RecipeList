@@ -24,7 +24,7 @@ public class RecipeListActivity extends AppCompatActivity {
         recipeRecyclerView = (RecyclerView) findViewById(R.id.recipe_recycler_view);
 
         // keep for performance improvement if changes in content dont change layout size
-        recipeRecyclerView.setHasFixedSize(true);
+//        recipeRecyclerView.setHasFixedSize(true);
 
         recipeAdapter = new RecipeAdapter(recipeList);
         // use a linear layout manager to show items in vertical scrolling list
@@ -40,12 +40,12 @@ public class RecipeListActivity extends AppCompatActivity {
     private void prepareRecipeData() {
         Recipe recipe = new Recipe("chicken", "www.chicken.com");
         recipeList.add(recipe);
-//
-//        recipe = new Recipe("steak", "www.steak.com");
-//        recipeList.add(recipe);
-//
-//        recipe = new Recipe("pancakes", "www.pancakes.com");
-//        recipeList.add(recipe);
+
+        recipe = new Recipe("steak", "www.steak.com");
+        recipeList.add(recipe);
+
+        recipe = new Recipe("pancakes", "www.pancakes.com");
+        recipeList.add(recipe);
 
         recipeAdapter.notifyDataSetChanged();
     }
