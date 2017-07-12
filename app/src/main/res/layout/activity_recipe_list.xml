@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.kld2.recipelist.RecipeListActivity">
 
-    <!-- A RecyclerView with some commonly used attributes -->
+    <!-- A RecyclerView to display recipes -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recipe_recycler_view"
         android:layout_width="368dp"
@@ -17,5 +17,18 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
          />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_recipe_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:backgroundTint="@color/colorPrimary"
+        android:tint="@android:color/white"
+        android:src="@android:drawable/ic_input_add" />
+
 
 </android.support.constraint.ConstraintLayout>
