@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         public static class RecipeViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
             public TextView name, link;
-            public RecipeViewHolder(TextView view) {
+            public RecipeViewHolder(View view) {
                 super(view);
                 name = view.findViewById(R.id.name);
                 link = view.findViewById(R.id.link);
@@ -38,7 +39,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         public RecipeAdapter.RecipeViewHolder onCreateViewHolder(ViewGroup parent,
                                                        int viewType) {
             // create a new view
-            TextView itemView = (TextView) LayoutInflater.from(parent.getContext())
+            View itemView = (View) LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recipe_list_row, parent, false);
             // set the view's size, margins, paddings and layout parameter
 
