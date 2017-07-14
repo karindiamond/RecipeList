@@ -1,10 +1,12 @@
 package com.kld2.recipelist;
 
+import java.io.Serializable;
+
 /**
  * Created by Karin on 7/11/2017.
  */
 
-public class Recipe {
+public class Recipe implements Serializable {
 
     private String name, link;
 

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class NewRecipeActivity extends AppCompatActivity {
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setTitle("New Recipe");
 
-        recipe = new Recipe("", ""); //TODO
+        recipe = new Recipe();
         RecipeListApp appState = ((RecipeListApp)getApplicationContext());
         recipeList = appState.globalRecipeList;
 
@@ -46,6 +47,10 @@ public class NewRecipeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String str = nameText.getText().toString();
                 recipe.setName(str);
+                if (recipe.getName().equals("")) {
+                    Toast.makeText(getApplicationContext(), "name is a required field", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 str = linkText.getText().toString();
                 recipe.setLink(str);
                 recipeList.add(recipe);
@@ -54,5 +59,5 @@ public class NewRecipeActivity extends AppCompatActivity {
         });
 
     }
-    
+
 }
