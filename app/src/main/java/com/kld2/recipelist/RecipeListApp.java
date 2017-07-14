@@ -11,6 +11,6 @@ import java.util.List;
 
 public class RecipeListApp extends Application {
 
-    public List<Recipe> globalRecipeList = new ArrayList<>();
+    public static List<Recipe> globalRecipeList = new ArrayList<>();
 
 }

@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,7 +25,7 @@ public class RecipeListActivity extends AppCompatActivity {
     private RecyclerView.Adapter recipeAdapter;
     private RecyclerView.LayoutManager recipeLayoutManager;
     private FloatingActionButton fab;
-    public List<Recipe> recipeList;
+    private RecipeListApp appState;
 
     private String fileName = "RecipeList.txt";
 
@@ -39,15 +38,16 @@ public class RecipeListActivity extends AppCompatActivity {
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setTitle("Recipes");
 
-        RecipeListApp appState = ((RecipeListApp)getApplicationContext());
-        recipeList = appState.globalRecipeList;
+        appState = ((RecipeListApp)getApplicationContext());
 
         recipeRecyclerView = (RecyclerView) findViewById(R.id.recipe_recycler_view);
 
-        // keep for performance improvement if changes in content dont change layout size
+        // keep for performance improvement if changes in content don't change layout size
         recipeRecyclerView.setHasFixedSize(true);
 
-        recipeAdapter = new RecipeAdapter(recipeList);
+        loadRecipeData();
+
+        recipeAdapter = new RecipeAdapter(appState.globalRecipeList);
         // use a linear layout manager to show items in vertical scrolling list
         recipeLayoutManager = new LinearLayoutManager(this);
         recipeRecyclerView.setLayoutManager(recipeLayoutManager);
@@ -62,22 +62,6 @@ public class RecipeListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Recipe recipe = new Recipe("saving?", "www.testing.com");
-        recipeList.add(recipe);
-        System.out.println("RECIPE LIST BEFORE SAVE: " + recipeList.get(0));
-        saveRecipeData();
-        recipeList.clear();
-        loadRecipeData();
-        System.out.println("RECIPE LIST after load: " + recipeList.get(0).getName());
-        recipeAdapter.notifyDataSetChanged();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();  // Always call the superclass method first
-//        recipeAdapter.notifyDataSetChanged();
-//        saveRecipeData();
     }
 
     @Override
@@ -87,16 +71,12 @@ public class RecipeListActivity extends AppCompatActivity {
     }
 
     private void loadRecipeData() {
-        System.out.println("LOAD RECIPE DATA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         try {
-            System.out.println("Recipe list before: " + recipeList.isEmpty());
             FileInputStream fileInputStream = openFileInput(fileName);
             ObjectInputStream is = new ObjectInputStream(fileInputStream);
-            recipeList = (List<Recipe>)is.readObject();
+            appState.globalRecipeList = (List<Recipe>)is.readObject();
             is.close();
             fileInputStream.close();
-            System.out.println("Recipe list: " + recipeList.get(0).getName());
-            recipeAdapter.notifyDataSetChanged();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -104,27 +84,21 @@ public class RecipeListActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-//
-//
-//        Recipe recipe = new Recipe("chicken", "www.chicken.com");
-//        recipeList.add(recipe);
-//
-//        recipe = new Recipe("steak", "www.steak.com");
-//        recipeList.add(recipe);
-//
-//        recipe = new Recipe("pancakes", "www.pancakes.com");
-//        recipeList.add(recipe);
 
-        recipeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        saveRecipeData();
     }
 
     public void  saveRecipeData() {
-        System.out.println("SAVE RECIPE DATA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE); //MODE PRIVATE
             ObjectOutputStream os = new ObjectOutputStream(fileOutputStream);
-            os.writeObject(recipeList);
+            os.writeObject(appState.globalRecipeList);
             os.flush();
             os.close();
             fileOutputStream.close();
