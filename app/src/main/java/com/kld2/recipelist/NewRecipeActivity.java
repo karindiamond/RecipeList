@@ -31,8 +31,7 @@ public class NewRecipeActivity extends AppCompatActivity {
         ab.setTitle("New Recipe");
 
         recipe = new Recipe();
-        RecipeListApp appState = ((RecipeListApp)getApplicationContext());
-        recipeList = appState.globalRecipeList;
+        recipeList = RecipeListApp.globalRecipeList;
 
         nameText = (EditText) findViewById(R.id.name_edit_text);
         nameText.setHint("enter recipe name");
@@ -45,14 +44,14 @@ public class NewRecipeActivity extends AppCompatActivity {
 
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String str = nameText.getText().toString();
-                recipe.setName(str);
+                String name = nameText.getText().toString();
                 if (recipe.getName().equals("")) {
                     Toast.makeText(getApplicationContext(), "name is a required field", Toast.LENGTH_LONG).show();
                     return;
                 }
-                str = linkText.getText().toString();
-                recipe.setLink(str);
+                recipe.setName(name);
+                String link = linkText.getText().toString();
+                recipe.setLink(link);
                 recipeList.add(recipe);
                 finish();
             }
