@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeListActivity extends AppCompatActivity {
@@ -36,6 +37,7 @@ public class RecipeListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
+        System.out.println("creating");
 
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setTitle("Recipes");
@@ -64,6 +66,12 @@ public class RecipeListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recipeAdapter.notifyDataSetChanged();
     }
 
     private void setSwipeToDelete() {

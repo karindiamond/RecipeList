@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RecipeList</string>
+    <string name="delete_string">Delete</string>
 </resources>

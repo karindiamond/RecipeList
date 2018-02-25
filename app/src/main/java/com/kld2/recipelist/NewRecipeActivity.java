@@ -45,11 +45,11 @@ public class NewRecipeActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String name = nameText.getText().toString();
+                recipe.setName(name);
                 if (recipe.getName().equals("")) {
                     Toast.makeText(getApplicationContext(), "name is a required field", Toast.LENGTH_LONG).show();
                     return;
                 }
-                recipe.setName(name);
                 String link = linkText.getText().toString();
                 recipe.setLink(link);
                 recipeList.add(recipe);
