@@ -3,6 +3,7 @@ package com.kld2.recipelist;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +38,6 @@ public class RecipeListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
-        System.out.println("creating");
 
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setTitle("Recipes");
@@ -48,7 +48,9 @@ public class RecipeListActivity extends AppCompatActivity {
         // keep for performance improvement if changes in content don't change layout size
         recipeRecyclerView.setHasFixedSize(true);
 
-        loadRecipeData();
+        if (savedInstanceState == null) {
+            loadRecipeData();
+        }
 
         recipeAdapter = new RecipeAdapter(RecipeListApp.globalRecipeList);
 

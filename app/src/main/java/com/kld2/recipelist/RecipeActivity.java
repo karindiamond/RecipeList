@@ -4,8 +4,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -29,16 +31,20 @@ public class RecipeActivity extends AppCompatActivity {
 
         for (Recipe r: RecipeListApp.globalRecipeList) {
             if (r.getName().equals(recipeName)) {
-                this.recipe = r;
+                recipe = r;
             }
         }
-        if (this.recipe == null) {
+        if (recipe == null) {
             //TODO how handle this case?
             Toast.makeText(getApplicationContext(), "No recipe with that name found", Toast.LENGTH_LONG).show();
             return;
         }
         android.support.v7.app.ActionBar ab = getSupportActionBar();
-        ab.setTitle(this.recipe.getName());
+        ab.setTitle(recipe.getName());
+        TextView recipeLink = (TextView) findViewById(R.id.recipe_link);
+        recipeLink.setText(recipe.getLink());
+        TextView recipeTimes = (TextView) findViewById(R.id.recipe_time);
+        recipeTimes.setText(recipe.getTimes());
     }
 
     @Override

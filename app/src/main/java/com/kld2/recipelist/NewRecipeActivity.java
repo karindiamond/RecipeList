@@ -18,6 +18,8 @@ public class NewRecipeActivity extends AppCompatActivity {
 
     EditText nameText;
     EditText linkText;
+    EditText hoursText;
+    EditText minutesText;
     Button btn;
     Recipe recipe;
     List<Recipe> recipeList;
@@ -34,9 +36,10 @@ public class NewRecipeActivity extends AppCompatActivity {
         recipeList = RecipeListApp.globalRecipeList;
 
         nameText = (EditText) findViewById(R.id.name_edit_text);
-        nameText.setHint("enter recipe name");
         linkText = (EditText) findViewById(R.id.link_edit_text);
-        linkText.setHint("enter recipe link");
+        hoursText = (EditText) findViewById(R.id.hours_edit_text);
+        minutesText = (EditText) findViewById(R.id.minutes_edit_text);
+
         //Get keyboard to show
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -52,6 +55,13 @@ public class NewRecipeActivity extends AppCompatActivity {
                 }
                 String link = linkText.getText().toString();
                 recipe.setLink(link);
+
+                String prepHoursInput = hoursText.getText().toString();
+                int prepHours = prepHoursInput.isEmpty() ? 0 : Integer.parseInt(prepHoursInput);
+                String prepMinutesInput = minutesText.getText().toString();
+                int prepMinutes = prepHoursInput.isEmpty() ? 0 : Integer.parseInt(prepMinutesInput);
+                int prepTime = (prepHours * 60) + prepMinutes;
+                recipe.setPrepTime(prepTime);
                 recipeList.add(recipe);
                 finish();
             }
