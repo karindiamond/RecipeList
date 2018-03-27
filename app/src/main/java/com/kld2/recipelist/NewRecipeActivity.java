@@ -18,8 +18,10 @@ public class NewRecipeActivity extends AppCompatActivity {
 
     EditText nameText;
     EditText linkText;
-    EditText hoursText;
-    EditText minutesText;
+    EditText prepHoursText;
+    EditText prepMinutesText;
+    EditText cookHoursText;
+    EditText cookMinutesText;
     Button btn;
     Recipe recipe;
     List<Recipe> recipeList;
@@ -35,15 +37,17 @@ public class NewRecipeActivity extends AppCompatActivity {
         recipe = new Recipe();
         recipeList = RecipeListApp.globalRecipeList;
 
-        nameText = (EditText) findViewById(R.id.name_edit_text);
-        linkText = (EditText) findViewById(R.id.link_edit_text);
-        hoursText = (EditText) findViewById(R.id.hours_edit_text);
-        minutesText = (EditText) findViewById(R.id.minutes_edit_text);
+        nameText = findViewById(R.id.name_edit_text);
+        linkText = findViewById(R.id.link_edit_text);
+        prepHoursText = findViewById(R.id.prep_hours_edit_text);
+        prepMinutesText = findViewById(R.id.prep_minutes_edit_text);
+        cookHoursText = findViewById(R.id.cook_hours_edit_text);
+        cookMinutesText = findViewById(R.id.cook_minutes_edit_text);
 
         //Get keyboard to show
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-        btn = (Button) findViewById(R.id.save_button);
+        btn = findViewById(R.id.save_button);
 
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -56,12 +60,20 @@ public class NewRecipeActivity extends AppCompatActivity {
                 String link = linkText.getText().toString();
                 recipe.setLink(link);
 
-                String prepHoursInput = hoursText.getText().toString();
+                String prepHoursInput = prepHoursText.getText().toString();
                 int prepHours = prepHoursInput.isEmpty() ? 0 : Integer.parseInt(prepHoursInput);
-                String prepMinutesInput = minutesText.getText().toString();
-                int prepMinutes = prepHoursInput.isEmpty() ? 0 : Integer.parseInt(prepMinutesInput);
+                String prepMinutesInput = prepMinutesText.getText().toString();
+                int prepMinutes = prepMinutesInput.isEmpty() ? 0 : Integer.parseInt(prepMinutesInput);
                 int prepTime = (prepHours * 60) + prepMinutes;
                 recipe.setPrepTime(prepTime);
+
+                String cookHoursInput = cookHoursText.getText().toString();
+                int cookHours = cookHoursInput.isEmpty() ? 0 : Integer.parseInt(cookHoursInput);
+                String cookMinutesInput = cookMinutesText.getText().toString();
+                int cookMinutes = cookMinutesInput.isEmpty() ? 0 : Integer.parseInt(cookMinutesInput);
+                int cookTime = (cookHours * 60) + cookMinutes;
+                recipe.setCookTime(cookTime);
+
                 recipeList.add(recipe);
                 finish();
             }

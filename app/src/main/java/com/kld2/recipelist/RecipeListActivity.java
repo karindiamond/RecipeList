@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -60,7 +61,7 @@ public class RecipeListActivity extends AppCompatActivity {
         recipeRecyclerView.setItemAnimator(new DefaultItemAnimator());
         recipeRecyclerView.setAdapter(recipeAdapter);
 
-        fab = (FloatingActionButton) findViewById(R.id.add_recipe_fab);
+        fab = findViewById(R.id.add_recipe_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,11 +186,12 @@ public class RecipeListActivity extends AppCompatActivity {
         }
 
         // Create new views (invoked by the layout manager)
+        @NonNull
         @Override
-        public RecipeAdapter.RecipeViewHolder onCreateViewHolder(ViewGroup parent,
+        public RecipeAdapter.RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                                  int viewType) {
             // create a new view
-            View itemView = (View) LayoutInflater.from(parent.getContext())
+            View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recipe_list_row, parent, false);
             // set the view's size, margins, paddings and layout parameter
             itemView.setOnClickListener(onClickListener);
@@ -198,7 +200,7 @@ public class RecipeListActivity extends AppCompatActivity {
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
-        public void onBindViewHolder(RecipeViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
             Recipe recipe = recipeList.get(position);
             holder.name.setText(recipe.getName());
             holder.link.setText(recipe.getLink());

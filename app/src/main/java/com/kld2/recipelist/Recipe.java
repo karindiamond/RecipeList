@@ -44,8 +44,8 @@ public class Recipe implements Serializable {
         String result = Utils.timeToString(getTotalTime());
         if (prepTime != 0 && cookTime != 0) {
             result = "Prep Time: " + Utils.timeToString(prepTime)
-                    + "; Cook Time: " + Utils.timeToString(cookTime)
-                    + "; Total Time: " + result + ";";
+                    + "\nCook Time: " + Utils.timeToString(cookTime)
+                    + "\nTotal Time: " + result;
         }
         return result;
     }
