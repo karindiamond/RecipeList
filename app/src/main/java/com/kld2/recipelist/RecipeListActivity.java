@@ -29,8 +29,10 @@ public class RecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle("Recipes");
+        //TODO as per guidelines, better to use a Toolbar https://developer.android.com/training/appbar/setting-up.html
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Recipes");
+        }
 
         recipeRecyclerView = findViewById(R.id.recipe_recycler_view);
         setSwipeToDelete();

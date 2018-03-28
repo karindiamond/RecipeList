@@ -33,13 +33,14 @@ public class RecipeActivity extends AppCompatActivity {
         }
 
         if (recipe == null) {
-            //TODO how handle this case?
             Toast.makeText(this, "No recipe with that name found", Toast.LENGTH_LONG).show();
-            return;
+            finish();
         }
 
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle(recipe.getName());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(recipe.getName());
+        }
+
         TextView recipeLink = findViewById(R.id.recipe_link);
         recipeLink.setText(recipe.getLink());
         TextView recipeTimes = findViewById(R.id.recipe_time);

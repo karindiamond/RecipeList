@@ -9,8 +9,8 @@ import java.io.Serializable;
 public class Recipe implements Serializable {
 
     private String name, link;
-    private int prepTime = 0;
-    private int cookTime = 0;
+    private int prepTime;
+    private int cookTime;
 
     public Recipe(String name, String link, int prepTime, int cookTime) {
         this.name = name;

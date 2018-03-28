@@ -28,8 +28,9 @@ public class NewRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_recipe);
 
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle("New Recipe");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("New Recipe");
+        }
 
         nameText = findViewById(R.id.name_edit_text);
         linkText = findViewById(R.id.link_edit_text);
