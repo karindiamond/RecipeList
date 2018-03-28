@@ -11,6 +11,8 @@ import java.util.List;
 
 public class RecipeListApp extends Application {
 
+    //TODO move loading of this list to this class? (with a getter containing a null check)
+    //TODO add static add to list method
     public static List<Recipe> globalRecipeList = new ArrayList<>();
 
 }

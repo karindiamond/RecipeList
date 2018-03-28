@@ -3,9 +3,9 @@ package com.kld2.recipelist;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,15 +23,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeListActivity extends AppCompatActivity {
 
     private RecyclerView recipeRecyclerView;
     private RecipeAdapter recipeAdapter;
-    private RecyclerView.LayoutManager recipeLayoutManager;
-    private FloatingActionButton fab;
 
     private String fileName = "RecipeList.txt";
 
@@ -40,10 +37,10 @@ public class RecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
-        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setTitle("Recipes");
 
-        recipeRecyclerView = (RecyclerView) findViewById(R.id.recipe_recycler_view);
+        recipeRecyclerView = findViewById(R.id.recipe_recycler_view);
         setSwipeToDelete();
 
         // keep for performance improvement if changes in content don't change layout size
@@ -56,12 +53,12 @@ public class RecipeListActivity extends AppCompatActivity {
         recipeAdapter = new RecipeAdapter(RecipeListApp.globalRecipeList);
 
         // use a linear layout manager to show items in vertical scrolling list
-        recipeLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager recipeLayoutManager = new LinearLayoutManager(this);
         recipeRecyclerView.setLayoutManager(recipeLayoutManager);
         recipeRecyclerView.setItemAnimator(new DefaultItemAnimator());
         recipeRecyclerView.setAdapter(recipeAdapter);
 
-        fab = findViewById(R.id.add_recipe_fab);
+        FloatingActionButton fab = findViewById(R.id.add_recipe_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,7 +71,7 @@ public class RecipeListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        recipeAdapter.notifyDataSetChanged();
+        recipeAdapter.notifyDataSetChanged(); //TODO do we need this?
     }
 
     private void setSwipeToDelete() {
@@ -114,13 +111,14 @@ public class RecipeListActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        saveRecipeData();
+        saveRecipeData();   //TODO we are saving here and in onStop. Shouldn't be saving in both places. Should maybe be saving instead at the time the list changes (or some item updates) or in the onPause
     }
 
     private void loadRecipeData() {
         try {
             FileInputStream fileInputStream = openFileInput(fileName);
             ObjectInputStream is = new ObjectInputStream(fileInputStream);
+            //noinspection unchecked -- the below case should be safe so we suppress the warning due to type erasure
             RecipeListApp.globalRecipeList = (List<Recipe>)is.readObject();
             is.close();
             fileInputStream.close();

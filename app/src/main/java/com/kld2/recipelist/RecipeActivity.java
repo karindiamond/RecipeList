@@ -2,15 +2,13 @@ package com.kld2.recipelist;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.List;
 
 /**
  * Created by Karin on 7/12/2017.
@@ -18,7 +16,7 @@ import java.util.List;
 
 public class RecipeActivity extends AppCompatActivity {
 
-    Recipe recipe = null;
+    Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,24 +24,25 @@ public class RecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe);
 
         // Get recipe
-        Bundle b = getIntent().getExtras();
-        String recipeName = b.getString("recipeName");
-
-        for (Recipe r: RecipeListApp.globalRecipeList) {
-            if (r.getName().equals(recipeName)) {
-                recipe = r;
+        String recipeName = getIntent().getStringExtra("recipeName");
+        for (Recipe recipe: RecipeListApp.globalRecipeList) {
+            if (recipe.getName().equals(recipeName)) {
+                this.recipe = recipe;
+                break;
             }
         }
+
         if (recipe == null) {
             //TODO how handle this case?
-            Toast.makeText(getApplicationContext(), "No recipe with that name found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No recipe with that name found", Toast.LENGTH_LONG).show();
             return;
         }
-        android.support.v7.app.ActionBar ab = getSupportActionBar();
+
+        ActionBar ab = getSupportActionBar();
         ab.setTitle(recipe.getName());
-        TextView recipeLink = (TextView) findViewById(R.id.recipe_link);
+        TextView recipeLink = findViewById(R.id.recipe_link);
         recipeLink.setText(recipe.getLink());
-        TextView recipeTimes = (TextView) findViewById(R.id.recipe_time);
+        TextView recipeTimes = findViewById(R.id.recipe_time);
         recipeTimes.setText(recipe.getTimes());
     }
 

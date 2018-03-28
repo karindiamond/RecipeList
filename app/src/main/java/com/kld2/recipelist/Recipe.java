@@ -12,12 +12,11 @@ public class Recipe implements Serializable {
     private int prepTime = 0;
     private int cookTime = 0;
 
-    public Recipe() {
-    }
-
-    public Recipe(String name, String link) {
+    public Recipe(String name, String link, int prepTime, int cookTime) {
         this.name = name;
         this.link = link;
+        this.prepTime = prepTime;
+        this.cookTime = cookTime;
     }
 
     public String getName() {
