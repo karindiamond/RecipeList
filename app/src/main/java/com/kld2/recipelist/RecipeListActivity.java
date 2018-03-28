@@ -1,6 +1,5 @@
 package com.kld2.recipelist;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -18,19 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.List;
 
 public class RecipeListActivity extends AppCompatActivity {
 
     private RecyclerView recipeRecyclerView;
     private RecipeAdapter recipeAdapter;
-
-    private String fileName = "RecipeList.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +38,7 @@ public class RecipeListActivity extends AppCompatActivity {
         // keep for performance improvement if changes in content don't change layout size
         recipeRecyclerView.setHasFixedSize(true);
 
-        if (savedInstanceState == null) {
-            loadRecipeData();
-        }
-
-        recipeAdapter = new RecipeAdapter(RecipeListApp.globalRecipeList);
+        recipeAdapter = new RecipeAdapter(((RecipeListApp) getApplication()).getRecipeList());
 
         // use a linear layout manager to show items in vertical scrolling list
         RecyclerView.LayoutManager recipeLayoutManager = new LinearLayoutManager(this);
@@ -71,7 +59,13 @@ public class RecipeListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        recipeAdapter.notifyDataSetChanged(); //TODO do we need this?
+        recipeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ((RecipeListApp) getApplication()).saveRecipeData();
     }
 
     private void setSwipeToDelete() {
@@ -93,7 +87,7 @@ public class RecipeListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         recipeAdapter.notifyItemRemoved(position);    //item removed from recylcerview
-                        RecipeListApp.globalRecipeList.remove(recipe);  //then remove item
+                        ((RecipeListApp) getApplication()).getRecipeList().remove(recipe);  //then remove item
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {  //not removing items if cancel is done
                     @Override
@@ -106,46 +100,6 @@ public class RecipeListActivity extends AppCompatActivity {
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recipeRecyclerView); //set swipe to recylcerview
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        saveRecipeData();   //TODO we are saving here and in onStop. Shouldn't be saving in both places. Should maybe be saving instead at the time the list changes (or some item updates) or in the onPause
-    }
-
-    private void loadRecipeData() {
-        try {
-            FileInputStream fileInputStream = openFileInput(fileName);
-            ObjectInputStream is = new ObjectInputStream(fileInputStream);
-            //noinspection unchecked -- the below case should be safe so we suppress the warning due to type erasure
-            RecipeListApp.globalRecipeList = (List<Recipe>)is.readObject();
-            is.close();
-            fileInputStream.close();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        saveRecipeData();
-    }
-
-    public void  saveRecipeData() {
-        FileOutputStream fileOutputStream;
-        try {
-            fileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE); //MODE PRIVATE
-            ObjectOutputStream os = new ObjectOutputStream(fileOutputStream);
-            os.writeObject(RecipeListApp.globalRecipeList);
-            os.flush();
-            os.close();
-            fileOutputStream.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     private class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {

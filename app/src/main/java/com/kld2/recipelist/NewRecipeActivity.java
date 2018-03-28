@@ -65,7 +65,7 @@ public class NewRecipeActivity extends AppCompatActivity {
                 int cookMinutes = cookMinutesInput.isEmpty() ? 0 : Integer.parseInt(cookMinutesInput);
                 int cookTime = (cookHours * 60) + cookMinutes;
 
-                RecipeListApp.globalRecipeList.add(new Recipe(name, link, prepTime, cookTime));
+                ((RecipeListApp)getApplication()).getRecipeList().add(new Recipe(name, link, prepTime, cookTime));
                 finish();
             }
         });

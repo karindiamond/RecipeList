@@ -25,7 +25,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         // Get recipe
         String recipeName = getIntent().getStringExtra("recipeName");
-        for (Recipe recipe: RecipeListApp.globalRecipeList) {
+        for (Recipe recipe: ((RecipeListApp)getApplication()).getRecipeList()) {
             if (recipe.getName().equals(recipeName)) {
                 this.recipe = recipe;
                 break;
@@ -63,8 +63,7 @@ public class RecipeActivity extends AppCompatActivity {
                 builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() { //when click on DELETE
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        recipeAdapter.notifyItemRemoved(position);    //item removed from recylcerview
-                        RecipeListApp.globalRecipeList.remove(recipe);  //then remove item
+                        ((RecipeListApp)getApplication()).getRecipeList().remove(recipe);
                         finish();
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {  //not removing items if cancel is done
