@@ -27,15 +27,31 @@ public class Recipe implements Serializable {
         return link;
     }
 
-    public Integer getPrepTime() {
+    public int getPrepTime() {
         return prepTime;
     }
 
-    public Integer getCookTime() {
+    public int getPrepHours() {
+        return prepTime / 60;
+    }
+
+    public int getPrepMinutes() {
+        return prepTime % 60;
+    }
+
+    public int getCookTime() {
         return cookTime;
     }
 
-    public Integer getTotalTime() {
+    public int getCookHours() {
+        return cookTime / 60;
+    }
+
+    public int getCookMinutes() {
+        return cookTime % 60;
+    }
+
+    public int getTotalTime() {
         return prepTime + cookTime;
     }
 
@@ -57,11 +73,11 @@ public class Recipe implements Serializable {
         this.link = link;
     }
 
-    public void setPrepTime(Integer prepTime) {
+    public void setPrepTime(int prepTime) {
         this.prepTime = prepTime;
     }
 
-    public void setCookTime(Integer cookTime) {
+    public void setCookTime(int cookTime) {
         this.cookTime = cookTime;
     }
 

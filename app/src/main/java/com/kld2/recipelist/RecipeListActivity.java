@@ -78,36 +78,35 @@ public class RecipeListActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-                final int position = viewHolder.getAdapterPosition(); //get position which is swipe
+                final int position = viewHolder.getAdapterPosition(); //get position which is swiped
                 final Recipe recipe = recipeAdapter.recipeList.get(position);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeListActivity.this); //alert for confirm to delete
-                builder.setMessage("Are you sure you want to delete this recipe?");    //set message
-
-                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() { //when click on DELETE
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        recipeAdapter.notifyItemRemoved(position);    //item removed from recylcerview
-                        ((RecipeListApp) getApplication()).getRecipeList().remove(recipe);  //then remove item
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {  //not removing items if cancel is done
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        recipeAdapter.notifyItemRemoved(position + 1);    //notifies the RecyclerView Adapter that data in adapter has been removed at a particular position.
-                        recipeAdapter.notifyItemRangeChanged(position, recipeAdapter.getItemCount());   //notifies the RecyclerView Adapter that positions of element in adapter has been changed from position(removed element index to end of list), please update it.
-                    }
-                }).show();  //show alert dialog
+                new AlertDialog.Builder(RecipeListActivity.this)
+                        .setMessage("Are you sure you want to delete this recipe?")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                recipeAdapter.notifyItemRemoved(position); //update view since we are on the page currently
+                                ((RecipeListApp) getApplication()).getRecipeList().remove(recipe);
+                            }})
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                recipeAdapter.notifyItemRemoved(position + 1);    //notifies the RecyclerView Adapter that data in adapter has been removed at a particular position.
+                                recipeAdapter.notifyItemRangeChanged(position, recipeAdapter.getItemCount());   //notifies the RecyclerView Adapter that positions of element in adapter has been changed from position(removed element index to end of list), please update it.
+                            }})
+                        .show();
             }
         };
+
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recipeRecyclerView); //set swipe to recylcerview
+        itemTouchHelper.attachToRecyclerView(recipeRecyclerView);
     }
 
     private class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
         private List<Recipe> recipeList;
         private View.OnClickListener onClickListener = new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 int position = recipeRecyclerView.getChildLayoutPosition(view);
