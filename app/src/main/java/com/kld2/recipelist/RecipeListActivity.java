@@ -118,11 +118,9 @@ public class RecipeListActivity extends AppCompatActivity {
             }
         };
 
-        // Provide a reference to the views for each data item
-        // Complex data items may need more than one view per item, and
-        // you provide access to all the views for a data item in a view holder
+        // View Holder for each data item in the recyclerview
         class RecipeViewHolder extends RecyclerView.ViewHolder {
-            // each data item is just a string in this case
+
             private TextView name, link;
 
             RecipeViewHolder(View view) {
@@ -140,8 +138,7 @@ public class RecipeListActivity extends AppCompatActivity {
         // Create new views (invoked by the layout manager)
         @NonNull
         @Override
-        public RecipeAdapter.RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                                                 int viewType) {
+        public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             // create a new view
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recipe_list_row, parent, false);
@@ -162,14 +159,6 @@ public class RecipeListActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return recipeList.size();
-        }
-
-        public View.OnClickListener getOnClickListener() {
-            return onClickListener;
-        }
-
-        public void setOnItemClickListener(View.OnClickListener onItemClickListener) {
-            this.onClickListener = onItemClickListener;
         }
     }
 }

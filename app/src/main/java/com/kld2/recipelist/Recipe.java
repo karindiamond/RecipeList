@@ -8,11 +8,13 @@ import java.io.Serializable;
 
 public class Recipe implements Serializable {
 
+    private static final long serialVersionUID = 0L;
+
     private String name, link;
     private int prepTime;
     private int cookTime;
 
-    public Recipe(String name, String link, int prepTime, int cookTime) {
+    Recipe(String name, String link, int prepTime, int cookTime) {
         this.name = name;
         this.link = link;
         this.prepTime = prepTime;
@@ -51,7 +53,7 @@ public class Recipe implements Serializable {
         return cookTime % 60;
     }
 
-    public int getTotalTime() {
+    private int getTotalTime() {
         return prepTime + cookTime;
     }
 
