@@ -64,6 +64,7 @@ public class RecipeActivity extends AppCompatActivity {
                             }
                         })
                         .show();
+                linkText.setText(recipeLink.getText());
                 return true;
             }
         });
