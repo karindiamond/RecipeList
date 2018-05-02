@@ -29,9 +29,12 @@ public class RecipeListApp extends Application {
 
     private void loadRecipeData() {
         // Handle case where the file does not yet exist (new install)
-        if (!this.getFileStreamPath(fileName).exists()) {
-            recipeList = new ArrayList<>();
-        }
+        //File file = new File(getFilesDir() + File.separator + fileName);
+        //if (!this.getFileStreamPath(fileName).exists()) {
+//        if (!file.exists()) {
+//            recipeList = new ArrayList<>();
+//            return;
+//        }
 
         try {
             FileInputStream fileInputStream = openFileInput(fileName);
@@ -42,6 +45,11 @@ public class RecipeListApp extends Application {
             fileInputStream.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+        }
+
+        // TODO this is a fix for the commented code above. Determine why file.exists() was always true, even directly after uninstall
+        if (recipeList == null) {
+            recipeList = new ArrayList<>();
         }
     }
 
