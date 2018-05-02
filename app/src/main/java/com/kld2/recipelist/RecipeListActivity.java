@@ -92,9 +92,14 @@ public class RecipeListActivity extends AppCompatActivity {
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                recipeAdapter.notifyItemRemoved(position + 1);    //notifies the RecyclerView Adapter that data in adapter has been removed at a particular position.
                                 recipeAdapter.notifyItemRangeChanged(position, recipeAdapter.getItemCount());   //notifies the RecyclerView Adapter that positions of element in adapter has been changed from position(removed element index to end of list), please update it.
                             }})
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                recipeAdapter.notifyItemRangeChanged(position, recipeAdapter.getItemCount());   //notifies the RecyclerView Adapter that positions of element in adapter has been changed from position(removed element index to end of list), please update it.
+                            }
+                        })
                         .show();
             }
         };
@@ -141,7 +146,7 @@ public class RecipeListActivity extends AppCompatActivity {
         public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             // create a new view
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recipe_list_row, parent, false);
+                    .inflate(R.layout.recipe_list_item, parent, false);
             // set the view's size, margins, paddings and layout parameter
             itemView.setOnClickListener(onClickListener);
             return new RecipeViewHolder(itemView);
