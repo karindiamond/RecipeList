@@ -50,7 +50,7 @@ public class RecipeFragment extends Fragment {
             @Override
             public boolean onLongClick(View v) {
                 @SuppressLint("InflateParams") // we can ignore this because views in alertdialogs do not inherit from their parent layouts
-                        View timeEntryView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_time_entry, null);
+                View timeEntryView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_time_entry, null);
                 final EditText prepHoursText = timeEntryView.findViewById(R.id.prep_hours_edit_text);
                 final EditText prepMinutesText = timeEntryView.findViewById(R.id.prep_minutes_edit_text);
                 final EditText cookHoursText = timeEntryView.findViewById(R.id.cook_hours_edit_text);

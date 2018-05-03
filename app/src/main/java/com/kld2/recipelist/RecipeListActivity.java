@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -42,9 +41,7 @@ public class RecipeListActivity extends AppCompatActivity {
         recipeAdapter = new RecipeAdapter(((RecipeListApp) getApplication()).getRecipeList());
 
         // use a linear layout manager to show items in vertical scrolling list
-        RecyclerView.LayoutManager recipeLayoutManager = new LinearLayoutManager(this);
-        recipeRecyclerView.setLayoutManager(recipeLayoutManager);
-        recipeRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        recipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         recipeRecyclerView.setAdapter(recipeAdapter);
 
         FloatingActionButton fab = findViewById(R.id.add_recipe_fab);
@@ -136,8 +133,8 @@ public class RecipeListActivity extends AppCompatActivity {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        RecipeAdapter(List<Recipe> myRecipeList) {
-            recipeList = myRecipeList;
+        RecipeAdapter(List<Recipe> recipeList) {
+            this.recipeList = recipeList;
         }
 
         // Create new views (invoked by the layout manager)

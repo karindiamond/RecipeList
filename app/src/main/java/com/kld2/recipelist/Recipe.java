@@ -1,6 +1,8 @@
 package com.kld2.recipelist;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Karin on 7/11/2017.
@@ -13,12 +15,14 @@ public class Recipe implements Serializable {
     private String name, link;
     private int prepTime;
     private int cookTime;
+    private List<Ingredient> ingredients;
 
     Recipe(String name, String link, int prepTime, int cookTime) {
         this.name = name;
         this.link = link;
         this.prepTime = prepTime;
         this.cookTime = cookTime;
+        this.ingredients = new ArrayList<>();
     }
 
     public String getName() {
@@ -65,6 +69,10 @@ public class Recipe implements Serializable {
                     + "\nTotal Time: " + result;
         }
         return result;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
 
     public void setName(String name) {
