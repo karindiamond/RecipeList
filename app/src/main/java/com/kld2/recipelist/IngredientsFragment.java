@@ -10,18 +10,23 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Collections;
 import java.util.List;
 
 public class IngredientsFragment extends Fragment {
 
     private RecyclerView ingredientsRecyclerView;
+    private ItemTouchHelper itemTouchHelper;
 
     @Nullable
     @Override
@@ -54,7 +59,7 @@ public class IngredientsFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 int quantityNumerator = quantityToInt(quantityNumeratorText);
                                 int quantityDenominator = quantityToInt(quantityDenominatorText);
-                                if (validateIngredient(quantityNumerator, quantityDenominator, unitText, nameText, noteText)) {
+                                if (validateIngredient(quantityNumerator, quantityDenominator, nameText)) {
                                     ingredients.add(new Ingredient(quantityNumerator, quantityDenominator, unitText.getText().toString(), nameText.getText().toString(), noteText.getText().toString()));
                                     // TODO why is this not needed here: ingredientsAdapter.notifyDataSetChanged();
                                 }
@@ -64,6 +69,41 @@ public class IngredientsFragment extends Fragment {
             }
         });
 
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+                if (fromPosition < toPosition) {
+                    for (int i = fromPosition; i < toPosition; i++) {
+                        Collections.swap(ingredients, i, i + 1);
+                    }
+                } else {
+                    for (int i = fromPosition; i > toPosition; i--) {
+                        Collections.swap(ingredients, i, i - 1);
+                    }
+                }
+                ingredientsAdapter.notifyItemMoved(fromPosition, toPosition);
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+
+            @Override
+            public boolean isLongPressDragEnabled() {
+                return false;
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(ingredientsRecyclerView);
+
         return rootView;
     }
 
@@ -71,7 +111,7 @@ public class IngredientsFragment extends Fragment {
         return intText.getText().toString().isEmpty() ? 1 : Integer.parseInt(intText.getText().toString());
     }
 
-    private boolean validateIngredient(int quantityNumerator, int quantityDenominator, EditText unitText, EditText nameText, EditText noteText) {
+    private boolean validateIngredient(int quantityNumerator, int quantityDenominator, EditText nameText) {
         if (quantityNumerator < 1 || quantityDenominator < 1) {
             Toast.makeText(getContext(), "Invalid quantity", Toast.LENGTH_LONG).show();
             return false;
@@ -106,7 +146,7 @@ public class IngredientsFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 int quantityNumerator = quantityToInt(quantityNumeratorText);
                                 int quantityDenominator = quantityToInt(quantityDenominatorText);
-                                if (validateIngredient(quantityNumerator, quantityDenominator, unitText, nameText, noteText)) {
+                                if (validateIngredient(quantityNumerator, quantityDenominator, nameText)) {
                                     ingredient.setQuantityNumerator(quantityNumerator);
                                     ingredient.setQuantityDenominator(quantityDenominator);
                                     ingredient.setUnit(unitText.getText().toString());
@@ -130,10 +170,12 @@ public class IngredientsFragment extends Fragment {
         class IngredientViewHolder extends RecyclerView.ViewHolder {
 
             private TextView ingredient;
+            private ImageView handleView;
 
             IngredientViewHolder(View view) {
                 super(view);
                 ingredient = view.findViewById(R.id.ingredient);
+                handleView = view.findViewById(R.id.handle);
             }
         }
 
@@ -155,10 +197,20 @@ public class IngredientsFragment extends Fragment {
         }
 
         // Replace the contents of a view (invoked by the layout manager)
+        @SuppressLint("ClickableViewAccessibility")
         @Override
-        public void onBindViewHolder(@NonNull IngredientsAdapter.IngredientViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final IngredientsAdapter.IngredientViewHolder holder, int position) {
             Ingredient ingredient = ingredientList.get(position);
             holder.ingredient.setText(ingredient.getIngredientString());
+            holder.handleView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                        itemTouchHelper.startDrag(holder);
+                    }
+                    return true;
+                }
+            });
         }
 
         // Return the size of your dataset (invoked by the layout manager)
