@@ -76,6 +76,13 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        // TODO only save this specific recipe somehow?
+        super.onPause();
+        ((RecipeListApp) getApplication()).saveRecipeData();
+    }
+
     private class RecipePagerAdapter extends FragmentPagerAdapter {
 
         RecipePagerAdapter(FragmentManager fm) {

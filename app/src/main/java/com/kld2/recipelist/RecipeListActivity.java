@@ -83,8 +83,8 @@ public class RecipeListActivity extends AppCompatActivity {
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                recipeAdapter.notifyItemRemoved(position); //update view since we are on the page currently
                                 ((RecipeListApp) getApplication()).getRecipeList().remove(recipe);
+                                recipeAdapter.notifyItemRemoved(position); //update view since we are on the page currently
                             }})
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override

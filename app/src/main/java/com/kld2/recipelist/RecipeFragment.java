@@ -30,8 +30,8 @@ public class RecipeFragment extends Fragment {
         recipeLink.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                final EditText linkText = new EditText(getActivity());
-                new AlertDialog.Builder(requireActivity())
+                final EditText linkText = new EditText(getContext());
+                new AlertDialog.Builder(requireContext())
                         .setMessage("Enter new link:")
                         .setView(linkText)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -50,12 +50,12 @@ public class RecipeFragment extends Fragment {
             @Override
             public boolean onLongClick(View v) {
                 @SuppressLint("InflateParams") // we can ignore this because views in alertdialogs do not inherit from their parent layouts
-                View timeEntryView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_time_entry, null);
+                View timeEntryView = LayoutInflater.from(getContext()).inflate(R.layout.recipe_time_entry, null);
                 final EditText prepHoursText = timeEntryView.findViewById(R.id.prep_hours_edit_text);
                 final EditText prepMinutesText = timeEntryView.findViewById(R.id.prep_minutes_edit_text);
                 final EditText cookHoursText = timeEntryView.findViewById(R.id.cook_hours_edit_text);
                 final EditText cookMinutesText = timeEntryView.findViewById(R.id.cook_minutes_edit_text);
-                new AlertDialog.Builder(requireActivity())
+                new AlertDialog.Builder(requireContext())
                         .setMessage("Enter new recipe times:")
                         .setView(timeEntryView)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {

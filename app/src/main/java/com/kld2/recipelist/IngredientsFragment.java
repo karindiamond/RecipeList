@@ -45,7 +45,7 @@ public class IngredientsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 @SuppressLint("InflateParams") // we can ignore this because views in alertdialogs do not inherit from their parent layouts
-                View ingredientEntryView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_entry, null);
+                View ingredientEntryView = LayoutInflater.from(getContext()).inflate(R.layout.recipe_ingredient_entry, null);
                 final EditText quantityNumeratorText = ingredientEntryView.findViewById(R.id.quantity_numerator_text);
                 final EditText quantityDenominatorText = ingredientEntryView.findViewById(R.id.quantity_denominator_text);
                 final EditText unitText = ingredientEntryView.findViewById(R.id.unit_text);
@@ -132,7 +132,7 @@ public class IngredientsFragment extends Fragment {
                 final int position = ingredientsRecyclerView.getChildLayoutPosition(view);
                 final Ingredient ingredient = ingredientList.get(position);
                 @SuppressLint("InflateParams") // we can ignore this because views in alertdialogs do not inherit from their parent layouts
-                View ingredientEntryView = LayoutInflater.from(getActivity()).inflate(R.layout.recipe_ingredient_entry, null);
+                View ingredientEntryView = LayoutInflater.from(getContext()).inflate(R.layout.recipe_ingredient_entry, null);
                 final EditText quantityNumeratorText = ingredientEntryView.findViewById(R.id.quantity_numerator_text);
                 final EditText quantityDenominatorText = ingredientEntryView.findViewById(R.id.quantity_denominator_text);
                 final EditText unitText = ingredientEntryView.findViewById(R.id.unit_text);
@@ -154,6 +154,21 @@ public class IngredientsFragment extends Fragment {
                                     ingredient.setNote(noteText.getText().toString());
                                     notifyItemChanged(position);
                                 }
+                            }
+                        })
+                        .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new AlertDialog.Builder(requireContext())
+                                        .setMessage("Are you sure you want to delete this ingredient?")
+                                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                ingredientList.remove(position);
+                                                notifyItemRemoved(position);
+                                            }})
+                                        .setNegativeButton("Cancel", null)
+                                        .show();
                             }
                         })
                         .show();
