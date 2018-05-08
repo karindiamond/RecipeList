@@ -46,8 +46,8 @@ public class NewRecipeActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String name = nameText.getText().toString();
-                if (name.isEmpty()) {
-                    Toast.makeText(NewRecipeActivity.this, "name is a required field", Toast.LENGTH_LONG).show();
+                if (name.trim().isEmpty()) {
+                    Toast.makeText(NewRecipeActivity.this, "Recipe name is required", Toast.LENGTH_LONG).show();
                     return;
                 }
 

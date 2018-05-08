@@ -16,6 +16,7 @@ public class Recipe implements Serializable {
     private int prepTime;
     private int cookTime;
     private List<Ingredient> ingredients;
+    private List<Direction> directions;
 
     Recipe(String name, String link, int prepTime, int cookTime) {
         this.name = name;
@@ -23,6 +24,7 @@ public class Recipe implements Serializable {
         this.prepTime = prepTime;
         this.cookTime = cookTime;
         this.ingredients = new ArrayList<>();
+        this.directions = new ArrayList<>();
     }
 
     public String getName() {
@@ -73,6 +75,10 @@ public class Recipe implements Serializable {
 
     public List<Ingredient> getIngredients() {
         return ingredients;
+    }
+
+    public List<Direction> getDirections() {
+        return directions;
     }
 
     public void setName(String name) {

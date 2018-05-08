@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class IngredientsFragment extends Fragment {
         ingredientsRecyclerView = rootView.findViewById(R.id.ingredients_recycler_view);
         ingredientsRecyclerView.setHasFixedSize(true);
         final IngredientsAdapter ingredientsAdapter = new IngredientsAdapter(ingredients);
-        ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ingredientsRecyclerView.setAdapter(ingredientsAdapter);
 
         FloatingActionButton fab = rootView.findViewById(R.id.add_ingredient_fab);
@@ -51,7 +52,7 @@ public class IngredientsFragment extends Fragment {
                 final EditText unitText = ingredientEntryView.findViewById(R.id.unit_text);
                 final EditText nameText = ingredientEntryView.findViewById(R.id.name_text);
                 final EditText noteText = ingredientEntryView.findViewById(R.id.note_text);
-                new AlertDialog.Builder(requireContext())
+                AlertDialog alert = new AlertDialog.Builder(requireContext())
                         .setMessage("Add ingredient:")
                         .setView(ingredientEntryView)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -65,7 +66,9 @@ public class IngredientsFragment extends Fragment {
                                 }
                             }
                         })
-                        .show();
+                        .create();
+                alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                alert.show();
             }
         });
 
@@ -116,7 +119,7 @@ public class IngredientsFragment extends Fragment {
             Toast.makeText(getContext(), "Invalid quantity", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (nameText.getText().toString().isEmpty()) {
+        if (nameText.getText().toString().trim().isEmpty()) {
             Toast.makeText(getContext(), "Ingredient name is required", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -138,7 +141,7 @@ public class IngredientsFragment extends Fragment {
                 final EditText unitText = ingredientEntryView.findViewById(R.id.unit_text);
                 final EditText nameText = ingredientEntryView.findViewById(R.id.name_text);
                 final EditText noteText = ingredientEntryView.findViewById(R.id.note_text);
-                new AlertDialog.Builder(requireContext())
+                AlertDialog alert = new AlertDialog.Builder(requireContext())
                         .setMessage("Edit ingredient:")
                         .setView(ingredientEntryView)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -171,12 +174,14 @@ public class IngredientsFragment extends Fragment {
                                         .show();
                             }
                         })
-                        .show();
+                        .create();
                 quantityNumeratorText.setText(String.valueOf(ingredient.getQuantityNumerator()));
                 quantityDenominatorText.setText(String.valueOf(ingredient.getQuantityDenominator()));
                 unitText.setText(ingredient.getUnit());
                 nameText.setText(ingredient.getName());
                 noteText.setText(ingredient.getNote());
+                alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                quantityNumeratorText.setSelection(quantityNumeratorText.getText().length());
                 return true;
             }
         };
