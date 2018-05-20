@@ -1,6 +1,7 @@
 package com.kld2.recipelist;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Direction implements Serializable {
@@ -10,9 +11,9 @@ public class Direction implements Serializable {
     private String text;
     private List<Ingredient> ingredients;
 
-    Direction(String text, List<Ingredient> ingredients) {
+    Direction(String text) {
         this.text = text;
-        this.ingredients = ingredients;
+        this.ingredients = new ArrayList<>();
     }
 
     public String getText() {

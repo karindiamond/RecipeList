@@ -34,7 +34,7 @@ public class DirectionsFragment extends Fragment {
 
         directionsRecyclerView = rootView.findViewById(R.id.directions_recycler_view);
         directionsRecyclerView.setHasFixedSize(true);
-        final DirectionsFragment.DirectionsAdapter directionsAdapter = new DirectionsFragment.DirectionsAdapter(directions);
+        DirectionsAdapter directionsAdapter = new DirectionsAdapter(directions);
         directionsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         directionsRecyclerView.setAdapter(directionsAdapter);
 
@@ -54,25 +54,34 @@ public class DirectionsFragment extends Fragment {
                                     Toast.makeText(getContext(), "Direction text is required", Toast.LENGTH_LONG).show();
                                     return;
                                 }
-                                directions.add(new Direction(directionText.getText().toString(), new ArrayList<Ingredient>()));
+                                directions.add(new Direction(directionText.getText().toString()));
                             }
                         })
                         .create();
                 alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                alert.show();
             }
         });
 
         return rootView;
     }
 
-    private class DirectionsAdapter extends RecyclerView.Adapter<DirectionsFragment.DirectionsAdapter.DirectionViewHolder> {
+    private class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.DirectionViewHolder> {
 
-        private List<Direction> directionList;
+        private List<Direction> directions;
+        private View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = directionsRecyclerView.getChildLayoutPosition(view);
+                List<Ingredient> ingredients = directions.get(position).getIngredients();
+                DirectionIngredientsDialogFragment.newInstance(ingredients).show(requireFragmentManager(), DirectionIngredientsDialogFragment.TAG);
+            }
+        };
         private View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 final int position = directionsRecyclerView.getChildLayoutPosition(view);
-                final Direction direction = directionList.get(position);
+                final Direction direction = directions.get(position);
                 final EditText directionText = new EditText(getContext());
                 directionText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 AlertDialog alert = new AlertDialog.Builder(requireContext())
@@ -97,7 +106,7 @@ public class DirectionsFragment extends Fragment {
                                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                directionList.remove(position);
+                                                directions.remove(position);
                                                 notifyItemRemoved(position);
                                             }})
                                         .setNegativeButton("Cancel", null)
@@ -125,26 +134,26 @@ public class DirectionsFragment extends Fragment {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        DirectionsAdapter(List<Direction> directionList) {
-            this.directionList = directionList;
+        DirectionsAdapter(List<Direction> directions) {
+            this.directions = directions;
         }
 
         // Create new views (invoked by the layout manager)
         @NonNull
         @Override
-        public DirectionsFragment.DirectionsAdapter.DirectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public DirectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             // create a new view
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.direction_list_item, parent, false);
-            // set the view's size, margins, paddings and layout parameter
+            itemView.setOnClickListener(onClickListener);
             itemView.setOnLongClickListener(onLongClickListener);
-            return new DirectionsFragment.DirectionsAdapter.DirectionViewHolder(itemView);
+            return new DirectionViewHolder(itemView);
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
-        public void onBindViewHolder(@NonNull final DirectionsFragment.DirectionsAdapter.DirectionViewHolder holder, int position) {
-            Direction direction = directionList.get(position);
+        public void onBindViewHolder(@NonNull final DirectionViewHolder holder, int position) {
+            Direction direction = directions.get(position);
             String directionText = (position + 1) + ". " + direction.getText();
             holder.direction.setText(directionText);
         }
@@ -152,7 +161,7 @@ public class DirectionsFragment extends Fragment {
         // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
-            return directionList.size();
+            return directions.size();
         }
     }
 }

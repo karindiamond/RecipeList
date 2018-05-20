@@ -76,7 +76,7 @@ public class RecipeListActivity extends AppCompatActivity {
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition(); //get position which is swiped
-                final Recipe recipe = recipeAdapter.recipeList.get(position);
+                final Recipe recipe = recipeAdapter.recipes.get(position);
 
                 new AlertDialog.Builder(RecipeListActivity.this)
                         .setMessage("Are you sure you want to delete this recipe?")
@@ -107,12 +107,12 @@ public class RecipeListActivity extends AppCompatActivity {
 
     private class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-        private List<Recipe> recipeList;
+        private List<Recipe> recipes;
         private View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = recipeRecyclerView.getChildLayoutPosition(view);
-                Recipe recipe = recipeList.get(position);
+                Recipe recipe = recipes.get(position);
                 // Open Recipe Activity
                 Intent intent = new Intent(RecipeListActivity.this, RecipeActivity.class);
                 intent.putExtra("recipeName", recipe.getName());
@@ -133,8 +133,8 @@ public class RecipeListActivity extends AppCompatActivity {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        RecipeAdapter(List<Recipe> recipeList) {
-            this.recipeList = recipeList;
+        RecipeAdapter(List<Recipe> recipes) {
+            this.recipes = recipes;
         }
 
         // Create new views (invoked by the layout manager)
@@ -152,7 +152,7 @@ public class RecipeListActivity extends AppCompatActivity {
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
-            Recipe recipe = recipeList.get(position);
+            Recipe recipe = recipes.get(position);
             holder.name.setText(recipe.getName());
             holder.link.setText(recipe.getLink());
         }
@@ -160,7 +160,7 @@ public class RecipeListActivity extends AppCompatActivity {
         // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
-            return recipeList.size();
+            return recipes.size();
         }
     }
 }

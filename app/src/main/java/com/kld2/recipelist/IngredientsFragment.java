@@ -128,12 +128,12 @@ public class IngredientsFragment extends Fragment {
 
     private class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder> {
 
-        private List<Ingredient> ingredientList;
+        private List<Ingredient> ingredients;
         private View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 final int position = ingredientsRecyclerView.getChildLayoutPosition(view);
-                final Ingredient ingredient = ingredientList.get(position);
+                final Ingredient ingredient = ingredients.get(position);
                 @SuppressLint("InflateParams") // we can ignore this because views in alertdialogs do not inherit from their parent layouts
                 View ingredientEntryView = LayoutInflater.from(getContext()).inflate(R.layout.recipe_ingredient_entry, null);
                 final EditText quantityNumeratorText = ingredientEntryView.findViewById(R.id.quantity_numerator_text);
@@ -167,8 +167,13 @@ public class IngredientsFragment extends Fragment {
                                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                ingredientList.remove(position);
+                                                Ingredient removedIngredient = ingredients.remove(position);
                                                 notifyItemRemoved(position);
+
+                                                // also delete ingredient from any direction ingredient lists that include it
+                                                for (Direction direction : ((RecipeActivity) requireActivity()).recipe.getDirections()) {
+                                                    direction.getIngredients().remove(removedIngredient);
+                                                }
                                             }})
                                         .setNegativeButton("Cancel", null)
                                         .show();
@@ -182,6 +187,7 @@ public class IngredientsFragment extends Fragment {
                 noteText.setText(ingredient.getNote());
                 alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 quantityNumeratorText.setSelection(quantityNumeratorText.getText().length());
+                alert.show();
                 return true;
             }
         };
@@ -200,27 +206,26 @@ public class IngredientsFragment extends Fragment {
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        IngredientsAdapter(List<Ingredient> ingredientList) {
-            this.ingredientList = ingredientList;
+        IngredientsAdapter(List<Ingredient> ingredients) {
+            this.ingredients = ingredients;
         }
 
         // Create new views (invoked by the layout manager)
         @NonNull
         @Override
-        public IngredientsAdapter.IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             // create a new view
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.ingredient_list_item, parent, false);
-            // set the view's size, margins, paddings and layout parameter
             itemView.setOnLongClickListener(onLongClickListener);
-            return new IngredientsAdapter.IngredientViewHolder(itemView);
+            return new IngredientViewHolder(itemView);
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         @SuppressLint("ClickableViewAccessibility")
         @Override
-        public void onBindViewHolder(@NonNull final IngredientsAdapter.IngredientViewHolder holder, int position) {
-            Ingredient ingredient = ingredientList.get(position);
+        public void onBindViewHolder(@NonNull final IngredientViewHolder holder, int position) {
+            Ingredient ingredient = ingredients.get(position);
             holder.ingredient.setText(ingredient.getIngredientString());
             holder.handleView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -236,7 +241,7 @@ public class IngredientsFragment extends Fragment {
         // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
-            return ingredientList.size();
+            return ingredients.size();
         }
     }
 }
