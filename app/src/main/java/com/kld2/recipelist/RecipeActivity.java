@@ -91,7 +91,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -103,6 +103,8 @@ public class RecipeActivity extends AppCompatActivity {
                     return new IngredientsFragment();
                 case 2:
                     return new DirectionsFragment();
+                case 3:
+                    return new NotesFragment();
                 default:
                     return null;
             }
@@ -118,6 +120,8 @@ public class RecipeActivity extends AppCompatActivity {
                     return "Ingredients";
                 case 2:
                     return "Directions";
+                case 3:
+                    return "Notes";
                 default:
                     return null;
             }

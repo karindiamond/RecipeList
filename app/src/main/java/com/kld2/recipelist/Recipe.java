@@ -10,13 +10,14 @@ import java.util.List;
 
 public class Recipe implements Serializable {
 
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 1L;
 
     private String name, link;
     private int prepTime;
     private int cookTime;
     private List<Ingredient> ingredients;
     private List<Direction> directions;
+    private List<Note> notes;
 
     Recipe(String name, String link, int prepTime, int cookTime) {
         this.name = name;
@@ -25,6 +26,7 @@ public class Recipe implements Serializable {
         this.cookTime = cookTime;
         this.ingredients = new ArrayList<>();
         this.directions = new ArrayList<>();
+        this.notes = new ArrayList<>();
     }
 
     public String getName() {
@@ -79,6 +81,10 @@ public class Recipe implements Serializable {
 
     public List<Direction> getDirections() {
         return directions;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
     }
 
     public void setName(String name) {
